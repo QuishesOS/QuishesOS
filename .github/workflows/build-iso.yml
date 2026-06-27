@@ -30,8 +30,8 @@ jobs:
             # Update system
             pacman -Syu --noconfirm
             
-            # Install archiso
-            pacman -S --noconfirm archiso
+            # Install archiso and GRUB (required for boot modes)
+            pacman -S --noconfirm archiso grub
             
             # Build ISO
             cd /workspace
