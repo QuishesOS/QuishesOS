@@ -1,0 +1,178 @@
+;; QuishesOS Control Center
+;; Quick settings panel for WiFi, Bluetooth, volume, brightness
+
+;; ==========================================
+;; Variables & Polls
+;; ==========================================
+
+(defpoll wifi_enabled :interval "2s"
+  "nmcli radio wifi | grep -q enabled && echo true || echo false")
+
+(defpoll wifi_list :interval "10s"
+  "scripts/control/wifi_list.sh")
+
+(defpoll bluetooth_enabled :interval "2s"
+  "bluetoothctl show | grep -q 'Powered: yes' && echo true || echo false")
+
+(defpoll bluetooth_devices :interval "5s"
+  "scripts/control/bluetooth_devices.sh")
+
+(defpoll volume :interval "500ms"
+  "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print int($2 * 100)}'")
+
+(defpoll brightness :interval "1s"
+  "brightnessctl get")
+
+(defpoll brightness_max :interval "60s"
+  "brightnessctl max")
+
+(defvar control_center_visible false)
+
+;; ==========================================
+;; Widgets
+;; ==========================================
+
+(defwidget wifi_section []
+  (box :class "control-section glass-panel"
+       :orientation "v"
+       :space-evenly false
+       :spacing 12
+    (box :class "section-header"
+         :orientation "h"
+      (label :class "section-title text-primary"
+             :halign "start"
+             :text "Wi-Fi")
+      (button :class "toggle-button ${wifi_enabled == 'true' ? 'active' : ''}"
+              :halign "end"
+              :hexpand true
+              :onclick "scripts/control/toggle_wifi.sh"
+        (label :text {wifi_enabled == "true" ? "ON" : "OFF"})))
+    (if {wifi_enabled == "true"}
+      (scroll :class "wifi-list"
+              :vscroll true
+              :hscroll false
+              :height 150
+        (box :orientation "v"
+             :spacing 8
+          (for network in wifi_list
+            (button :class "wifi-item"
+                    :onclick "scripts/control/connect_wifi.sh '${network.ssid}'"
+              (box :spacing 12
+                (label :class "icon"
+                       :text "")
+                (label :class "text-primary"
+                       :halign "start"
+                       :text network.ssid)
+                (label :class "text-secondary"
+                       :halign "end"
+                       :hexpand true
+                       :text {network.connected ? "✓" : ""}))))))
+      (label :class "text-secondary"
+             :text "Wi-Fi is disabled"))))
+
+(defwidget bluetooth_section []
+  (box :class "control-section glass-panel"
+       :orientation "v"
+       :space-evenly false
+       :spacing 12
+    (box :class "section-header"
+         :orientation "h"
+      (label :class "section-title text-primary"
+             :halign "start"
+             :text "Bluetooth")
+      (button :class "toggle-button ${bluetooth_enabled == 'true' ? 'active' : ''}"
+              :halign "end"
+              :hexpand true
+              :onclick "scripts/control/toggle_bluetooth.sh"
+        (label :text {bluetooth_enabled == "true" ? "ON" : "OFF"})))
+    (if {bluetooth_enabled == "true"}
+      (scroll :class "bluetooth-list"
+              :vscroll true
+              :hscroll false
+              :height 100
+        (box :orientation "v"
+             :spacing 8
+          (if {arraylength(bluetooth_devices) > 0}
+            (for device in bluetooth_devices
+              (button :class "bluetooth-item"
+                      :onclick "scripts/control/toggle_bluetooth_device.sh '${device.mac}'"
+                (box :spacing 12
+                  (label :class "icon"
+                         :text "")
+                  (label :class "text-primary"
+                         :halign "start"
+                         :text device.name)
+                  (label :class "text-secondary"
+                         :halign "end"
+                         :hexpand true
+                         :text {device.connected ? "✓" : ""}))))
+            (label :class "text-secondary"
+                   :text "No devices paired"))))
+      (label :class "text-secondary"
+             :text "Bluetooth is disabled"))))
+
+(defwidget volume_section []
+  (box :class "control-section glass-panel"
+       :orientation "v"
+       :space-evenly false
+       :spacing 12
+    (box :class "section-header"
+      (label :class "section-title text-primary"
+             :halign "start"
+             :text "Volume")
+      (label :class "text-accent monospace"
+             :halign "end"
+             :hexpand true
+             :text "${volume}%"))
+    (scale :class "volume-slider"
+           :value volume
+           :min 0
+           :max 100
+           :onchange "wpctl set-volume @DEFAULT_AUDIO_SINK@ {}%")))
+
+(defwidget brightness_section []
+  (box :class "control-section glass-panel"
+       :orientation "v"
+       :space-evenly false
+       :spacing 12
+    (box :class "section-header"
+      (label :class "section-title text-primary"
+             :halign "start"
+             :text "Brightness")
+      (label :class "text-accent monospace"
+             :halign "end"
+             :hexpand true
+             :text "${round(brightness / brightness_max * 100, 0)}%"))
+    (scale :class "brightness-slider"
+           :value {brightness / brightness_max * 100}
+           :min 5
+           :max 100
+           :onchange "brightnessctl set {}%")))
+
+;; ==========================================
+;; Window Definition
+;; ==========================================
+
+(defwindow control_center
+  :monitor 0
+  :geometry (geometry :x "0px"
+                      :y "32px"
+                      :width "380px"
+                      :height "600px"
+                      :anchor "top right")
+  :stacking "overlay"
+  :exclusive false
+  :windowtype "dock"
+  :wm-ignore false
+  
+  (box :class "control-center-container ${theme}"
+       :orientation "v"
+       :space-evenly false
+       :spacing 16
+    (label :class "text-primary label-large"
+           :halign "start"
+           :text "Control Center")
+    (wifi_section)
+    (bluetooth_section)
+    (volume_section)
+    (brightness_section)))

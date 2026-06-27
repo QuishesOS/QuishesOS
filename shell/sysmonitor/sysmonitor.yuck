@@ -1,0 +1,152 @@
+;; QuishesOS System Monitor Sidebar
+;; Live CPU, network, and disk usage stats with sparklines
+
+;; ==========================================
+;; Variables & Polls
+;; ==========================================
+
+(defpoll cpu_percent :interval "1s"
+  "top -bn1 | grep 'Cpu(s)' | sed 's/.*, *\\([0-9.]*\\)%* id.*/\\1/' | awk '{print int(100 - $1)}'")
+
+(defpoll mem_percent :interval "2s"
+  "free | grep Mem | awk '{print int($3/$2 * 100)}'")
+
+(defpoll network_stats :interval "1s"
+  "scripts/sysmonitor/network_usage.sh")
+
+(defpoll disk_list :interval "10s"
+  "scripts/sysmonitor/disk_usage.sh")
+
+;; ==========================================
+;; Widgets
+;; ==========================================
+
+(defwidget cpu_widget []
+  (box :class "monitor-section glass-panel"
+       :orientation "v"
+       :space-evenly false
+       :spacing 8
+    (box :class "section-header"
+      (label :class "section-title text-primary"
+             :halign "start"
+             :text "CPU")
+      (label :class "text-accent monospace"
+             :halign "end"
+             :hexpand true
+             :text "${cpu_percent}%"))
+    (box :class "stat-graph"
+         :height 40
+      (label :class "graph-placeholder text-secondary"
+             :text "▁▂▃▄▅▆▇█"))
+    (label :class "stat-detail text-secondary label-small"
+           :halign "start"
+           :text "Cores: $(nproc)")))
+
+(defwidget memory_widget []
+  (box :class "monitor-section glass-panel"
+       :orientation "v"
+       :space-evenly false
+       :spacing 8
+    (box :class "section-header"
+      (label :class "section-title text-primary"
+             :halign "start"
+             :text "Memory")
+      (label :class "text-accent monospace"
+             :halign "end"
+             :hexpand true
+             :text "${mem_percent}%"))
+    (box :class "mem-bar"
+      (scale :value mem_percent
+             :min 0
+             :max 100
+             :active false))
+    (label :class "stat-detail text-secondary label-small"
+           :halign "start"
+           :text "$(free -h | awk '/^Mem:/ {print $3 \" / \" $2}')")))
+
+(defwidget network_widget []
+  (box :class "monitor-section glass-panel"
+       :orientation "v"
+       :space-evenly false
+       :spacing 8
+    (label :class "section-title text-primary"
+           :halign "start"
+           :text "Network")
+    (box :orientation "v"
+         :spacing 4
+      (box :class "network-stat"
+        (label :class "text-secondary"
+               :halign "start"
+               :text "↓ Download")
+        (label :class "text-accent monospace"
+               :halign "end"
+               :hexpand true
+               :text "${network_stats[0]} KB/s"))
+      (box :class "network-stat"
+        (label :class "text-secondary"
+               :halign "start"
+               :text "↑ Upload")
+        (label :class "text-accent monospace"
+               :halign "end"
+               :hexpand true
+               :text "${network_stats[1]} KB/s")))))
+
+(defwidget disk_item [disk]
+  (box :class "disk-item"
+       :orientation "v"
+       :space-evenly false
+       :spacing 6
+    (box :class "disk-header"
+      (label :class "text-primary"
+             :halign "start"
+             :text disk.name)
+      (label :class "text-accent monospace"
+             :halign "end"
+             :hexpand true
+             :text "${disk.percent}%"))
+    (scale :class "disk-bar"
+           :value disk.percent
+           :min 0
+           :max 100
+           :active false)
+    (label :class "disk-detail text-secondary label-small"
+           :halign "start"
+           :text "${disk.used} / ${disk.size}")))
+
+(defwidget disk_widget []
+  (box :class "monitor-section glass-panel"
+       :orientation "v"
+       :space-evenly false
+       :spacing 12
+    (label :class "section-title text-primary"
+           :halign "start"
+           :text "Storage")
+    (box :orientation "v"
+         :spacing 12
+      (for disk in disk_list
+        (disk_item :disk disk)))))
+
+;; ==========================================
+;; Window Definition
+;; ==========================================
+
+(defwindow sysmonitor
+  :monitor 0
+  :geometry (geometry :x "-12px"
+                      :y "80px"
+                      :width "220px"
+                      :height "auto"
+                      :anchor "top right")
+  :stacking "fg"
+  :exclusive false
+  :windowtype "dock"
+  :wm-ignore false
+  
+  (box :class "sysmonitor-container ${theme}"
+       :orientation "v"
+       :space-evenly false
+       :spacing 12
+    (cpu_widget)
+    (memory_widget)
+    (network_widget)
+    (disk_widget)))

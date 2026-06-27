@@ -1,0 +1,56 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="browserGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff9d5c"/>
+      <stop offset="100%" stop-color="#ffb366"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  
+  <!-- Background rounded square -->
+  <rect width="512" height="512" rx="112" fill="url(#browserGrad)" filter="url(#shadow)"/>
+  
+  <!-- Compass/Globe icon -->
+  <g transform="translate(256, 256)">
+    <!-- Outer circle -->
+    <circle cx="0" cy="0" r="140" 
+            fill="none" 
+            stroke="rgba(255,255,255,0.9)" 
+            stroke-width="8"/>
+    
+    <!-- Globe meridians -->
+    <ellipse cx="0" cy="0" rx="140" ry="70" 
+             fill="none" 
+             stroke="rgba(255,255,255,0.6)" 
+             stroke-width="4"/>
+    <ellipse cx="0" cy="0" rx="70" ry="140" 
+             fill="none" 
+             stroke="rgba(255,255,255,0.6)" 
+             stroke-width="4"/>
+    
+    <!-- Horizontal lines (latitude) -->
+    <line x1="-140" y1="-70" x2="140" y2="-70" 
+          stroke="rgba(255,255,255,0.4)" 
+          stroke-width="3"/>
+    <line x1="-140" y1="0" x2="140" y2="0" 
+          stroke="rgba(255,255,255,0.4)" 
+          stroke-width="3"/>
+    <line x1="-140" y1="70" x2="140" y2="70" 
+          stroke="rgba(255,255,255,0.4)" 
+          stroke-width="3"/>
+    
+    <!-- Compass needle -->
+    <g>
+      <path d="M 0,-60 L 15,50 L 0,40 L -15,50 Z" 
+            fill="rgba(255,255,255,0.95)"/>
+      <path d="M 0,-60 L 15,50 L 0,40 Z" 
+            fill="rgba(255,157,92,0.6)"/>
+      <circle cx="0" cy="0" r="12" 
+              fill="rgba(255,255,255,0.95)"/>
+      <circle cx="0" cy="0" r="6" 
+              fill="rgba(255,157,92,0.8)"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,109 @@
+;; QuishesOS Top Bar
+;; macOS-style menu bar with app name and system indicators
+
+;; ==========================================
+;; Variables & Polls
+;; ==========================================
+
+(defpoll active_window :interval "500ms"
+  "scripts/bar/active_window.sh")
+
+(defpoll wifi_status :interval "5s"
+  "scripts/bar/wifi_status.sh")
+
+(defpoll volume_level :interval "1s"
+  "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print int($2 * 100)}'")
+
+(defpoll volume_muted :interval "1s"
+  "wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -q MUTED && echo true || echo false")
+
+(defpoll battery_percent :interval "10s"
+  "cat /sys/class/power_supply/BAT*/capacity 2>/dev/null || echo 100")
+
+(defpoll battery_status :interval "10s"
+  "cat /sys/class/power_supply/BAT*/status 2>/dev/null || echo 'AC'")
+
+(defvar show_control_center false)
+
+;; ==========================================
+;; Widgets
+;; ==========================================
+
+(defwidget bar_left []
+  (box :class "bar-left"
+       :halign "start"
+       :spacing 12
+    (label :class "app-name text-primary"
+           :text active_window)))
+
+(defwidget bar_right []
+  (box :class "bar-right"
+       :halign "end"
+       :spacing 8
+    (wifi_indicator)
+    (separator_vertical)
+    (volume_indicator)
+    (separator_vertical)
+    (battery_indicator)
+    (separator_vertical)
+    (clock_widget)))
+
+(defwidget wifi_indicator []
+  (button :class "icon-button"
+          :onclick "scripts/bar/toggle_control_center.sh wifi"
+    (label :class "icon"
+           :text {wifi_status == "connected" ? "" : ""})))
+
+(defwidget volume_indicator []
+  (button :class "icon-button"
+          :onclick "scripts/bar/toggle_control_center.sh volume"
+    (label :class "icon"
+           :text {volume_muted == "true" ? "" : 
+                  volume_level > 50 ? "" : ""})))
+
+(defwidget battery_indicator []
+  (box :class "battery-box"
+       :spacing 6
+    (label :class "icon"
+           :text {battery_status == "Charging" ? "" :
+                  battery_percent > 80 ? "" :
+                  battery_percent > 50 ? "" :
+                  battery_percent > 20 ? "" : ""})
+    (label :class "text-secondary monospace"
+           :text "${battery_percent}%")))
+
+(defwidget clock_widget []
+  (button :class "clock-button"
+          :onclick "eww open notif_center || eww close notif_center"
+    (box :spacing 8
+      (label :class "text-primary"
+             :text current_time)
+      (label :class "text-secondary label-small"
+             :text current_date))))
+
+(defwidget separator_vertical []
+  (box :class "separator"
+       :width 1
+       :height 20))
+
+;; ==========================================
+;; Window Definition
+;; ==========================================
+
+(defwindow bar
+  :monitor 0
+  :geometry (geometry :x "0%"
+                      :y "0%"
+                      :width "100%"
+                      :height "32px"
+                      :anchor "top center")
+  :stacking "fg"
+  :exclusive true
+  :windowtype "dock"
+  :wm-ignore false
+  
+  (box :class "bar-container ${theme}"
+       :orientation "h"
+    (bar_left)
+    (box :halign "center" :hexpand true)
+    (bar_right)))

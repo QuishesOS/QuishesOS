@@ -1,0 +1,47 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="codeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6F5CE0"/>
+      <stop offset="100%" stop-color="#9C8CF2"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  
+  <!-- Background rounded square -->
+  <rect width="512" height="512" rx="112" fill="url(#codeGrad)" filter="url(#shadow)"/>
+  
+  <!-- Code brackets </> -->
+  <g transform="translate(256, 256)">
+    <!-- Left bracket < -->
+    <path d="M -40,-100 L -120,-20 L -120,0 L -120,20 L -40,100" 
+          fill="none" 
+          stroke="rgba(255,255,255,0.95)" 
+          stroke-width="20" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"/>
+    
+    <!-- Right bracket > -->
+    <path d="M 40,-100 L 120,-20 L 120,0 L 120,20 L 40,100" 
+          fill="none" 
+          stroke="rgba(255,255,255,0.95)" 
+          stroke-width="20" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"/>
+    
+    <!-- Slash / -->
+    <line x1="0" y1="-120" x2="0" y2="120" 
+          stroke="rgba(255,255,255,0.75)" 
+          stroke-width="16" 
+          stroke-linecap="round">
+      <animateTransform attributeName="transform" type="rotate" values="0;5;0;-5;0" dur="4s" repeatCount="indefinite"/>
+    </line>
+    
+    <!-- Decorative dots (code highlighting) -->
+    <circle cx="-80" cy="-60" r="8" fill="rgba(255,179,102,0.7)"/>
+    <circle cx="80" cy="-60" r="8" fill="rgba(255,179,102,0.7)"/>
+    <circle cx="-80" cy="60" r="8" fill="rgba(124,224,166,0.7)"/>
+    <circle cx="80" cy="60" r="8" fill="rgba(124,224,166,0.7)"/>
+  </g>
+</svg>

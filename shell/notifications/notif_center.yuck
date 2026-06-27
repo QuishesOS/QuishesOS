@@ -1,0 +1,100 @@
+;; QuishesOS Notification Center
+;; Slide-in panel from right with notification history
+
+;; ==========================================
+;; Variables & Polls
+;; ==========================================
+
+(defpoll notifications :interval "5s"
+  "scripts/notifications/get_notifications.sh")
+
+(defpoll calendar :interval "3600s"
+  "cal")
+
+(defvar notif_center_visible false)
+
+;; ==========================================
+;; Widgets
+;; ==========================================
+
+(defwidget notif_item [notif]
+  (box :class "notif-item glass-panel"
+       :orientation "v"
+       :space-evenly false
+       :spacing 8
+    (box :class "notif-header"
+         :spacing 8
+      (label :class "notif-app text-accent"
+             :halign "start"
+             :text notif.app)
+      (label :class "notif-time text-secondary label-small"
+             :halign "end"
+             :hexpand true
+             :text notif.time))
+    (label :class "notif-summary text-primary"
+           :halign "start"
+           :wrap true
+           :text notif.summary)
+    (label :class "notif-body text-secondary"
+           :halign "start"
+           :wrap true
+           :limit-width 45
+           :text notif.body)))
+
+(defwidget notif_list []
+  (scroll :class "notif-scroll"
+          :vscroll true
+          :hscroll false
+    (box :class "notif-list-container"
+         :orientation "v"
+         :space-evenly false
+         :spacing 12
+      (if {arraylength(notifications) > 0}
+        (for notif in notifications
+          (notif_item :notif notif))
+        (label :class "no-notifs text-secondary"
+               :text "No notifications")))))
+
+(defwidget calendar_widget []
+  (box :class "calendar-container glass-panel"
+       :orientation "v"
+    (label :class "calendar-title text-primary label-large"
+           :text current_date)
+    (label :class "calendar-output monospace"
+           :text calendar)))
+
+(defwidget clear_notifs_button []
+  (button :class "clear-button glass-button"
+          :onclick "scripts/notifications/clear_all.sh"
+    (label :class "text-primary"
+           :text "Clear All")))
+
+;; ==========================================
+;; Window Definition
+;; ==========================================
+
+(defwindow notif_center
+  :monitor 0
+  :geometry (geometry :x "0px"
+                      :y "32px"
+                      :width "380px"
+                      :height "calc(100% - 64px)"
+                      :anchor "top right")
+  :stacking "overlay"
+  :exclusive false
+  :windowtype "dock"
+  :wm-ignore false
+  
+  (box :class "notif-center-container ${theme}"
+       :orientation "v"
+       :space-evenly false
+       :spacing 16
+    (box :class "notif-center-header"
+         :orientation "h"
+      (label :class "text-primary label-large"
+             :halign "start"
+             :text "Notifications")
+      (box :halign "end" :hexpand true
+        (clear_notifs_button)))
+    (notif_list)
+    (calendar_widget)))

@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QuishesOS Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-cream: #F7F3EC;
+            --bg-sky: #BFE3F0;
+            --bg-blush: #F6CFE0;
+            --bg-lavender: #D9C9F0;
+            --ink: #232136;
+            --ink-soft: rgba(35, 33, 54, 0.62);
+            --ink-faint: rgba(35, 33, 54, 0.4);
+            --glass-fill: rgba(255, 255, 255, 0.40);
+            --glass-fill-strong: rgba(255, 255, 255, 0.58);
+            --glass-border: rgba(255, 255, 255, 0.65);
+            --accent: #6F5CE0;
+            --accent-soft: #9C8CF2;
+            --accent-glow: rgba(111, 92, 224, 0.35);
+            --font-display: 'Outfit', system-ui, sans-serif;
+            --font-body: 'Inter', system-ui, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--ink);
+            overflow: hidden;
+        }
+
+        /* ---------- Screen shell ---------- */
+        .screen {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--bg-cream) 0%, var(--bg-sky) 38%, var(--bg-blush) 68%, var(--bg-lavender) 100%);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.55;
+            pointer-events: none;
+        }
+
+        .orb1 {
+            width: 480px;
+            height: 480px;
+            background: var(--bg-blush);
+            top: -160px;
+            left: -120px;
+            animation: drift1 26s ease-in-out infinite;
+        }
+
+        .orb2 {
+            width: 420px;
+            height: 420px;
+            background: var(--bg-sky);
+            bottom: -140px;
+            right: -100px;
+            animation: drift2 32s ease-in-out infinite;
+        }
+
+        .orb3 {
+            width: 320px;
+            height: 320px;
+            background: var(--accent-soft);
+            top: 40%;
+            left: 55%;
+            opacity: 0.28;
+            animation: drift3 22s ease-in-out infinite;
+        }
+
+        @keyframes drift1 {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(40px, 30px);
+            }
+        }
+
+        @keyframes drift2 {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(-30px, -40px);
+            }
+        }
+
+        @keyframes drift3 {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(-20px, 20px) scale(1.08);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .orb1,
+            .orb2,
+            .orb3 {
+                animation: none;
+            }
+        }
+
+        /* ---------- Top bar ---------- */
+        .topbar {
+            position: relative;
+            z-index: 5;
+            height: 50px;
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            background: var(--glass-fill);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .topbar .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--ink);
+        }
+
+        .logo-mark {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 11px;
+            color: #fff;
+        }
+
+        .close-btn {
+            background: var(--glass-fill-strong);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 6px 16px;
+            font-family: var(--font-body);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--ink-soft);
+            cursor: pointer;
+            transition: background .15s ease, transform .15s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.7);
+            transform: translateY(-1px);
+        }
+
+        /* ---------- Main layout ---------- */
+        .main-wrapper {
+            position: relative;
+            z-index: 2;
+            flex: 1 1 auto;
+            display: flex;
+            padding: 24px;
+            gap: 24px;
+            overflow: hidden;
+        }
+
+        /* ---------- Sidebar ---------- */
+        .sidebar {
+            width: 220px;
+            flex: 0 0 auto;
+            background: var(--glass-fill-strong);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 18px 12px;
+            backdrop-filter: blur(26px);
+            -webkit-backdrop-filter: blur(26px);
+            box-shadow: 0 20px 50px -25px rgba(80, 60, 140, 0.35);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow-y: auto;
+        }
+
+        .search-box {
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.5);
+            font-family: var(--font-body);
+            font-size: 13px;
+            color: var(--ink);
+            outline: none;
+        }
+
+        .search-box::placeholder {
+            color: var(--ink-faint);
+        }
+
+        .search-box:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            background: transparent;
+            border: 1px solid transparent;
+            transition: background .15s ease, border-color .15s ease, transform .2s ease;
+            text-decoration: none;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateX(2px);
+        }
+
+        .sidebar-item.active {
+            background: var(--glass-fill-strong);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .sidebar-icon {
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .sidebar-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--ink-soft);
+            transition: color .2s ease;
+        }
+
+        .sidebar-item.active .sidebar-label {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        /* ---------- Panel area ---------- */
+        .panel-area {
+            flex: 1 1 auto;
+            background: var(--glass-fill-strong);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 32px 36px;
+            backdrop-filter: blur(26px);
+            -webkit-backdrop-filter: blur(26px);
+            box-shadow: 0 30px 70px -30px rgba(80, 60, 140, 0.4);
+            overflow-y: auto;
+            display: none;
+        }
+
+        .panel-area.active {
+            display: block;
+            animation: panelIn .4s cubic-bezier(.21, .9, .32, 1);
+        }
+
+        @keyframes panelIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .panel-area.active {
+                animation: none;
+            }
+        }
+
+        .panel-title {
+            font-family: var(--font-display);
+            font-size: 26px;
+            font-weight: 700;
+            margin: 0 0 8px;
+            line-height: 1.2;
+        }
+
+        .panel-subtitle {
+            margin: 0 0 28px;
+            color: var(--ink-soft);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .section {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 14px;
+            color: var(--ink);
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--glass-border);
+            margin: 24px 0;
+        }
+
+        /* ---------- Form controls ---------- */
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .field label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ink-soft);
+        }
+
+        select,
+        input[type=text],
+        input[type=number] {
+            font-family: var(--font-body);
+            font-size: 14px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.55);
+            color: var(--ink);
+            outline: none;
+        }
+
+        select:focus,
+        input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .toggle-switch {
+            width: 44px;
+            height: 24px;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.1);
+            position: relative;
+            transition: background .2s ease;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #fff;
+            top: 3px;
+            left: 3px;
+            transition: left .2s cubic-bezier(.34, 1.56, .64, 1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        .toggle input {
+            display: none;
+        }
+
+        .toggle input:checked+.toggle-switch {
+            background: var(--accent);
+        }
+
+        .toggle input:checked+.toggle-switch::after {
+            left: 23px;
+        }
+
+        .toggle-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--ink-soft);
+        }
+
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .slider-track {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .slider {
+            flex: 1 1 auto;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(0, 0, 0, 0.08);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(111, 92, 224, 0.4);
+            transition: transform .15s ease;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+
+        .slider-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ink);
+            min-width: 50px;
+            text-align: right;
+            font-family: var(--font-body);
+        }
+
+        .btn {
+            font-family: var(--font-body);
+            font-size: 14px;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: transform .18s cubic-bezier(.34, 1.56, .64, 1), box-shadow .18s ease;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: translateY(0) scale(.97);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+            color: #fff;
+            box-shadow: 0 12px 24px -10px var(--accent-glow);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            box-shadow: 0 16px 30px -10px var(--accent-glow);
+        }
+
+        .btn-ghost {
+            background: rgba(255, 255, 255, 0.4);
+            color: var(--ink-soft);
+            border-color: var(--glass-border);
+        }
+
+        /* ---------- Theme cards ---------- */
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .theme-card {
+            padding: 16px;
+            border-radius: 14px;
+            border: 2px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+        }
+
+        .theme-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .theme-card.selected {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px var(--accent-glow);
+        }
+
+        .theme-preview {
+            height: 60px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .theme-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ink);
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="screen">
+        <div class="orb orb1"></div>
+        <div class="orb orb2"></div>
+        <div class="orb orb3"></div>
+
+        <div class="topbar">
+            <div class="brand">
+                <span class="logo-mark">Q</span>
+                QuishesOS Settings
+            </div>
+            <button class="close-btn" onclick="window.close()">Close</button>
+        </div>
+
+        <div class="main-wrapper">
+            <!-- Sidebar -->
+            <nav class="sidebar">
+                <input type="text" class="search-box" placeholder="Search settings..." id="searchBox">
+
+                <a class="sidebar-item active" data-panel="appearance">
+                    <span class="sidebar-icon">🎨</span>
+                    <span class="sidebar-label">Appearance</span>
+                </a>
+
+                <a class="sidebar-item" data-panel="display">
+                    <span class="sidebar-icon">🖥️</span>
+                    <span class="sidebar-label">Display</span>
+                </a>
+
+                <a class="sidebar-item" data-panel="input">
+                    <span class="sidebar-icon">⌨️</span>
+                    <span class="sidebar-label">Input</span>
+                </a>
+
+                <a class="sidebar-item" data-panel="network">
+                    <span class="sidebar-icon">🌐</span>
+                    <span class="sidebar-label">Network</span>
+                </a>
+
+                <a class="sidebar-item" data-panel="audio">
+                    <span class="sidebar-icon">🔊</span>
+                    <span class="sidebar-label">Audio</span>
+                </a>
+
+                <a class="sidebar-item" data-panel="system">
+                    <span class="sidebar-icon">⚙️</span>
+                    <span class="sidebar-label">System</span>
+                </a>
+            </nav>
+
+            <!-- Panel: Appearance -->
+            <div class="panel-area active" id="panel-appearance">
+                <h1 class="panel-title">Appearance</h1>
+                <p class="panel-subtitle">Customize the look and feel of QuishesOS</p>
+
+                <section class="section">
+                    <h2 class="section-title">Theme</h2>
+                    <div class="theme-grid">
+                        <div class="theme-card selected" data-theme="liquid_pastel">
+                            <div class="theme-preview" style="background:linear-gradient(135deg, #ff9ee8, #b4a7ff);">
+                            </div>
+                            <div class="theme-name">Liquid Pastel</div>
+                        </div>
+                        <div class="theme-card" data-theme="nordic_frost">
+                            <div class="theme-preview" style="background:linear-gradient(135deg, #5e81ac, #88c0d0);">
+                            </div>
+                            <div class="theme-name">Nordic Frost</div>
+                        </div>
+                        <div class="theme-card" data-theme="sakura_dream">
+                            <div class="theme-preview" style="background:linear-gradient(135deg, #ffb3d9, #c9a0dc);">
+                            </div>
+                            <div class="theme-name">Sakura Dream</div>
+                        </div>
+                        <div class="theme-card" data-theme="forest_mist">
+                            <div class="theme-preview" style="background:linear-gradient(135deg, #8fbc8f, #b8c9b8);">
+                            </div>
+                            <div class="theme-name">Forest Mist</div>
+                        </div>
+                        <div class="theme-card" data-theme="sunset_amber">
+                            <div class="theme-preview" style="background:linear-gradient(135deg, #ff9d5c, #ffb366);">
+                            </div>
+                            <div class="theme-name">Sunset Amber</div>
+                        </div>
+                        <div class="theme-card" data-theme="aurora_glass">
+                            <div class="theme-preview" style="background:linear-gradient(135deg, #00d4ff, #b759ff);">
+                            </div>
+                            <div class="theme-name">Aurora Glass</div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="divider"></div>
+
+                <section class="section">
+                    <h2 class="section-title">Blur Intensity</h2>
+                    <div class="slider-container">
+                        <div class="slider-track">
+                            <input type="range" class="slider" id="blurSlider" min="20" max="80" value="50">
+                            <span class="slider-value" id="blurValue">50px</span>
+                        </div>
+                        <div
+                            style="margin-top:12px; padding:20px; border-radius:12px; background:var(--glass-fill-strong); backdrop-filter:blur(var(--blur-preview, 50px)); border:1px solid var(--glass-border);">
+                            <p style="margin:0; font-size:13px; color:var(--ink-soft);">Preview: This panel uses the
+                                selected blur intensity</p>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="divider"></div>
+
+                <section class="section">
+                    <h2 class="section-title">Animation Speed</h2>
+                    <div class="field">
+                        <label for="animSpeed">Window animations</label>
+                        <select id="animSpeed">
+                            <option value="150">Fast (150ms)</option>
+                            <option value="250" selected>Normal (250ms)</option>
+                            <option value="400">Slow (400ms)</option>
+                            <option value="0">Off</option>
+                        </select>
+                    </div>
+                </section>
+
+                <div class="divider"></div>
+
+                <section class="section">
+                    <h2 class="section-title">Dock Settings</h2>
+                    <label class="toggle">
+                        <input type="checkbox" id="dockAutohide">
+                        <span class="toggle-switch"></span>
+                        <span class="toggle-label">Auto-hide dock</span>
+                    </label>
+                    <div class="field" style="margin-top:16px;">
+                        <label for="dockSize">Icon size</label>
+                        <div class="slider-track">
+                            <input type="range" class="slider" id="dockSize" min="32" max="64" value="48">
+                            <span class="slider-value" id="dockSizeValue">48px</span>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="dockPosition">Position</label>
+                        <select id="dockPosition">
+                            <option value="bottom" selected>Bottom</option>
+                            <option value="left">Left</option>
+                            <option value="right">Right</option>
+                        </select>
+                    </div>
+                </section>
+
+                <div style="margin-top:24px;">
+                    <button class="btn btn-primary" onclick="applyAppearanceSettings()">Apply Changes</button>
+                    <button class="btn btn-ghost" onclick="resetAppearanceSettings()" style="margin-left:12px;">Reset to
+                        Defaults</button>
+                </div>
+            </div>    <!-- Panel: Display -->
+    <div class="panel-area" id="panel-display">
+      <h1 class="panel-title">Display</h1>
+      <p class="panel-subtitle">Configure monitors, resolution, and refresh rate</p>
+
+      <section class="section">
+        <h2 class="section-title">Connected Displays</h2>
+        <div id="displayList">Loading displays...</div>
+      </section>
+
+      <div class="divider"></div>
+
+      <section class="section">
+        <h2 class="section-title">Resolution & Refresh Rate</h2>
+        <div class="field">
+          <label for="resolution">Resolution</label>
+          <select id="resolution"><option>1920�1080</option><option>2560�1440</option><option>3840�2160</option></select>
+        </div>
+        <div class="field">
+          <label for="refreshRate">Refresh Rate</label>
+          <select id="refreshRate"><option>60 Hz</option><option>100 Hz</option><option>120 Hz</option><option>144 Hz</option></select>
+        </div>
+        <label class="toggle"><input type="checkbox" id="vrrToggle"><span class="toggle-switch"></span><span class="toggle-label">Enable VRR (Variable Refresh Rate)</span></label>
+      </section>
+
+      <button class="btn btn-primary" style="margin-top:24px;" onclick="applyDisplaySettings()">Apply Changes</button>
+    </div>
+
+    <!-- Panel: Input -->
+    <div class="panel-area" id="panel-input">
+      <h1 class="panel-title">Input</h1>
+      <p class="panel-subtitle">Configure keyboard, mouse, and touchpad</p>
+
+      <section class="section">
+        <h2 class="section-title">Keyboard</h2>
+        <div class="field">
+          <label for="kbLayout">Layout</label>
+          <select id="kbLayout"><option>US QWERTY</option><option>UK QWERTY</option><option>Vietnamese TELEX</option></select>
+        </div>
+        <div class="field">
+          <label for="repeatRate">Repeat rate</label>
+          <div class="slider-track"><input type="range" class="slider" id="repeatRate" min="20" max="100" value="50"><span class="slider-value" id="repeatRateValue">50 cps</span></div>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <section class="section">
+        <h2 class="section-title">Mouse</h2>
+        <div class="field">
+          <label for="mouseSens">Sensitivity</label>
+          <div class="slider-track"><input type="range" class="slider" id="mouseSens" min="50" max="300" value="100"><span class="slider-value" id="mouseSensValue">1.0x</span></div>
+        </div>
+        <label class="toggle"><input type="checkbox" id="mouseAccel"><span class="toggle-switch"></span><span class="toggle-label">Pointer acceleration</span></label>
+      </section>
+
+      <button class="btn btn-primary" style="margin-top:24px;" onclick="applyInputSettings()">Apply Changes</button>
+    </div>
+
+    <!-- Panel: Network -->
+    <div class="panel-area" id="panel-network">
+      <h1 class="panel-title">Network</h1>
+      <p class="panel-subtitle">Manage Wi-Fi, Ethernet, and connections</p>
+
+      <section class="section">
+        <h2 class="section-title">Wi-Fi</h2>
+        <label class="toggle"><input type="checkbox" id="wifiToggle" checked><span class="toggle-switch"></span><span class="toggle-label">Enable Wi-Fi</span></label>
+        <div style="margin-top:16px; padding:14px; background:rgba(255,255,255,0.4); border-radius:10px; border:1px solid var(--glass-border);">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div><strong id="wifiSSID">MyNetwork</strong><br><span style="font-size:12px; color:var(--ink-faint);" id="wifiIP">192.168.1.100</span></div>
+            <div style="font-size:20px;">??</div>
+          </div>
+        </div>
+        <button class="btn btn-ghost" style="margin-top:12px;">Change Network</button>
+      </section>
+
+      <div class="divider"></div>
+
+      <section class="section">
+        <h2 class="section-title">Ethernet</h2>
+        <p style="font-size:13px; color:var(--ink-soft);" id="ethStatus">Not connected</p>
+      </section>
+    </div>
+
+    <!-- Panel: Audio -->
+    <div class="panel-area" id="panel-audio">
+      <h1 class="panel-title">Audio</h1>
+      <p class="panel-subtitle">Configure sound output and input devices</p>
+
+      <section class="section">
+        <h2 class="section-title">Output</h2>
+        <div class="field">
+          <label for="audioOutput">Output device</label>
+          <select id="audioOutput"><option>Speakers (Built-in)</option><option>Headphones</option><option>HDMI Audio</option></select>
+        </div>
+        <div class="field">
+          <label for="outputVol">Volume</label>
+          <div class="slider-track"><input type="range" class="slider" id="outputVol" min="0" max="100" value="70"><span class="slider-value" id="outputVolValue">70%</span></div>
+        </div>
+        <label class="toggle"><input type="checkbox" id="outputMute"><span class="toggle-switch"></span><span class="toggle-label">Mute output</span></label>
+      </section>
+
+      <div class="divider"></div>
+
+      <section class="section">
+        <h2 class="section-title">Input</h2>
+        <div class="field">
+          <label for="audioInput">Input device</label>
+          <select id="audioInput"><option>Microphone (Built-in)</option><option>USB Microphone</option></select>
+        </div>
+        <label class="toggle"><input type="checkbox" id="inputMute"><span class="toggle-switch"></span><span class="toggle-label">Mute input</span></label>
+      </section>
+
+      <button class="btn btn-primary" style="margin-top:24px;" onclick="applyAudioSettings()">Apply Changes</button>
+    </div>
+
+    <!-- Panel: System -->
+    <div class="panel-area" id="panel-system">
+      <h1 class="panel-title">System</h1>
+      <p class="panel-subtitle">About, updates, and system information</p>
+
+      <section class="section">
+        <h2 class="section-title">About QuishesOS</h2>
+        <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+          <div class="logo-mark" style="width:48px; height:48px; font-size:24px;">Q</div>
+          <div>
+            <div style="font-weight:600; font-size:18px;">QuishesOS</div>
+            <div style="font-size:13px; color:var(--ink-soft);">Version 2024.06.27</div>
+          </div>
+        </div>
+        <div style="font-size:13px; color:var(--ink-soft); line-height:1.6;">
+          Kernel: <strong id="kernelVer">Linux 6.9.4-quishes</strong><br>
+          Desktop: <strong>Hyprland � Liquid Glass</strong><br>
+          Shell: <strong>eww + rofi</strong>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <section class="section">
+        <h2 class="section-title">Power</h2>
+        <button class="btn btn-ghost" onclick="confirm('Restart system?') && fetch('/cgi-bin/reboot.sh')">Restart</button>
+        <button class="btn btn-ghost" onclick="confirm('Shut down?') && fetch('/cgi-bin/shutdown.sh')" style="margin-left:12px;">Shut Down</button>
+      </section>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Panel switching
+  const panels = document.querySelectorAll('.panel-area');
+  const sidebarItems = document.querySelectorAll('.sidebar-item');
+
+  sidebarItems.forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.preventDefault();
+      const panelId = 'panel-' + item.dataset.panel;
+      
+      // Update sidebar
+      sidebarItems.forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      
+      // Update panels
+      panels.forEach(p => p.classList.remove('active'));
+      document.getElementById(panelId).classList.add('active');
+    });
+  });
+
+  // Blur slider
+  const blurSlider = document.getElementById('blurSlider');
+  const blurValue = document.getElementById('blurValue');
+  blurSlider.addEventListener('input', (e) => {
+    const val = e.target.value;
+    blurValue.textContent = val + 'px';
+    document.documentElement.style.setProperty('--blur-preview', val + 'px');
+  });
+
+  // Dock size slider
+  const dockSize = document.getElementById('dockSize');
+  const dockSizeValue = document.getElementById('dockSizeValue');
+  dockSize.addEventListener('input', (e) => {
+    dockSizeValue.textContent = e.target.value + 'px';
+  });
+
+  // Theme cards
+  const themeCards = document.querySelectorAll('.theme-card');
+  themeCards.forEach(card => {
+    card.addEventListener('click', () => {
+      themeCards.forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+    });
+  });
+
+  // Sliders
+  document.getElementById('mouseSens').addEventListener('input', (e) => {
+    document.getElementById('mouseSensValue').textContent = (e.target.value / 100).toFixed(1) + 'x';
+  });
+  document.getElementById('repeatRate').addEventListener('input', (e) => {
+    document.getElementById('repeatRateValue').textContent = e.target.value + ' cps';
+  });
+  document.getElementById('outputVol').addEventListener('input', (e) => {
+    document.getElementById('outputVolValue').textContent = e.target.value + '%';
+  });
+
+  // Apply functions (placeholders - will call backend scripts)
+  function applyAppearanceSettings() {
+    const theme = document.querySelector('.theme-card.selected').dataset.theme;
+    const blur = blurSlider.value;
+    const animSpeed = document.getElementById('animSpeed').value;
+    console.log('Applying:', {theme, blur, animSpeed});
+    alert('Settings applied! (Backend integration coming)');
+  }
+
+  function resetAppearanceSettings() {
+    location.reload();
+  }
+
+  function applyDisplaySettings() {
+    alert('Display settings applied! (Backend integration coming)');
+  }
+
+  function applyInputSettings() {
+    alert('Input settings applied! (Backend integration coming)');
+  }
+
+  function applyAudioSettings() {
+    alert('Audio settings applied! (Backend integration coming)');
+  }
+
+  // Search functionality
+  const searchBox = document.getElementById('searchBox');
+  searchBox.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase();
+    sidebarItems.forEach(item => {
+      const label = item.querySelector('.sidebar-label').textContent.toLowerCase();
+      item.style.display = label.includes(query) ? 'flex' : 'none';
+    });
+  });
+</script>
+</body>
+</html>

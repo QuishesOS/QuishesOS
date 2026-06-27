@@ -1,0 +1,57 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="editorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff9ee8"/>
+      <stop offset="100%" stop-color="#b4a7ff"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  
+  <!-- Background rounded square -->
+  <rect width="512" height="512" rx="112" fill="url(#editorGrad)" filter="url(#shadow)"/>
+  
+  <!-- Document with pencil -->
+  <g transform="translate(100, 80)">
+    <!-- Document paper -->
+    <path d="M 40 40 L 40 320 Q 40 340 60 340 L 280 340 Q 300 340 300 320 L 300 100 L 240 40 Z" 
+          fill="rgba(255,255,255,0.95)" 
+          stroke="rgba(255,255,255,0.3)" 
+          stroke-width="3"/>
+    
+    <!-- Folded corner -->
+    <path d="M 240 40 L 240 80 Q 240 100 260 100 L 300 100 Z" 
+          fill="rgba(255,255,255,0.8)" 
+          stroke="rgba(255,158,232,0.2)" 
+          stroke-width="2"/>
+    
+    <!-- Text lines -->
+    <rect x="70" y="120" width="200" height="8" rx="4" fill="rgba(180,167,255,0.3)"/>
+    <rect x="70" y="150" width="180" height="8" rx="4" fill="rgba(180,167,255,0.25)"/>
+    <rect x="70" y="180" width="190" height="8" rx="4" fill="rgba(180,167,255,0.25)"/>
+    <rect x="70" y="210" width="160" height="8" rx="4" fill="rgba(180,167,255,0.2)"/>
+    <rect x="70" y="240" width="170" height="8" rx="4" fill="rgba(180,167,255,0.2)"/>
+    
+    <!-- Pencil -->
+    <g transform="translate(200, 220) rotate(135)">
+      <!-- Pencil body -->
+      <rect x="-10" y="-60" width="20" height="80" rx="3" 
+            fill="rgba(255,158,232,0.9)" 
+            stroke="rgba(180,167,255,0.5)" 
+            stroke-width="2"/>
+      
+      <!-- Pencil tip -->
+      <path d="M -10 20 L 0 35 L 10 20 Z" 
+            fill="rgba(35,33,54,0.8)"/>
+      
+      <!-- Pencil eraser -->
+      <rect x="-10" y="-70" width="20" height="10" rx="3" 
+            fill="rgba(255,179,217,0.7)"/>
+      
+      <!-- Pencil metal band -->
+      <rect x="-10" y="-60" width="20" height="4" 
+            fill="rgba(180,167,255,0.4)"/>
+    </g>
+  </g>
+</svg>

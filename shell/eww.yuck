@@ -1,0 +1,21 @@
+;; QuishesOS eww Configuration
+;; Main entry point for all widgets
+
+(include "bar/bar.yuck")
+(include "dock/dock.yuck")
+(include "notifications/notif_center.yuck")
+(include "control/control_center.yuck")
+(include "sysmonitor/sysmonitor.yuck")
+
+;; Global variables
+(defpoll current_time :interval "1s"
+  "date '+%H:%M'")
+
+(defpoll current_date :interval "60s"
+  "date '+%A, %B %d'")
+
+(defpoll refresh_rate :interval "10s"
+  :initial "60"
+  "hyprctl monitors -j | jq -r '.[0].refreshRate' | cut -d'.' -f1")
+
+(defvar theme "liquid-pastel")

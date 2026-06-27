@@ -1,0 +1,164 @@
+# QuishesOS Base Packages List
+# Minimal Arch Linux base with Hyprland compositor
+
+# Base System
+base
+base-devel
+linux
+linux-firmware
+linux-headers
+
+# Bootloader & Init
+systemd
+systemd-sysvcompat
+efibootmgr
+grub
+
+# Networking
+networkmanager
+network-manager-applet
+bluez
+bluez-utils
+wireless_tools
+wpa_supplicant
+
+# Audio
+pipewire
+pipewire-alsa
+pipewire-pulse
+pipewire-jack
+wireplumber
+pavucontrol
+
+# Wayland & Hyprland
+wayland
+wayland-protocols
+hyprland
+xdg-desktop-portal-hyprland
+xdg-desktop-portal-gtk
+qt5-wayland
+qt6-wayland
+
+# Desktop Shell (eww + rofi)
+eww
+rofi-wayland
+gtk-layer-shell
+jq
+socat
+
+# Installer
+firefox
+gparted
+arch-install-scripts
+
+# GPU Drivers
+mesa
+vulkan-icd-loader
+vulkan-intel
+vulkan-radeon
+nvidia-dkms
+nvidia-utils
+libva-mesa-driver
+libva-intel-driver
+
+# Fonts
+noto-fonts
+noto-fonts-cjk
+noto-fonts-emoji
+ttf-dejavu
+ttf-liberation
+ttf-font-awesome
+ttf-nerd-fonts-symbols
+ttf-inter
+ttf-jetbrains-mono
+
+# Icons & Themes
+papirus-icon-theme
+
+# Wallpaper & Media
+hyprpaper
+playerctl
+
+# Terminal & Shell
+kitty
+alacritty
+fish
+zsh
+bash-completion
+
+# File Manager & Utils
+thunar
+thunar-archive-plugin
+thunar-volman
+gvfs
+gvfs-mtp
+file-roller
+unzip
+unrar
+p7zip
+
+# Notifications & Launcher
+mako
+dunst
+rofi-wayland
+wofi
+
+# System Tools
+htop
+btop
+neofetch
+fastfetch
+git
+wget
+curl
+rsync
+vim
+nano
+
+# Display & Monitor Tools
+wlr-randr
+kanshi
+brightnessctl
+gammastep
+
+# Screenshot & Media
+grim
+slurp
+wl-clipboard
+swappy
+mpv
+imv
+
+# Development (C++ toolchain for NovaForge)
+gcc
+clang
+cmake
+make
+ninja
+gdb
+lldb
+clang-tools-extra
+cppcheck
+valgrind
+
+# Python (for system scripts)
+python
+python-pip
+
+# Archive & Compression
+zip
+tar
+bzip2
+gzip
+xz
+
+# Power Management
+tlp
+acpi
+acpid
+
+# Misc
+polkit
+polkit-gnome
+xdg-user-dirs
+xdg-utils

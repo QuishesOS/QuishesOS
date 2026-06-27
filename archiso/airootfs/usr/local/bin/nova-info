@@ -1,0 +1,114 @@
+#!/bin/bash
+# nova-info: QuishesOS System Information Display
+# Neofetch-style key/value system summary for QuishesOS
+
+# Color codes
+CYAN='\033[0;36m'
+PURPLE='\033[0;35m'
+RESET='\033[0m'
+BOLD='\033[1m'
+
+# Get system information
+get_os() {
+    echo "QuishesOS $(date +%Y.%m.%d)"
+}
+
+get_kernel() {
+    uname -r
+}
+
+get_uptime() {
+    uptime -p | sed 's/up //'
+}
+
+get_packages() {
+    pacman -Qq | wc -l
+}
+
+get_shell() {
+    basename "$SHELL"
+}
+
+get_resolution() {
+    if command -v hyprctl &> /dev/null; then
+        hyprctl monitors | grep -oP '\d+x\d+@\d+' | head -1
+    else
+        echo "N/A"
+    fi
+}
+
+get_de() {
+    echo "Hyprland"
+}
+
+get_wm() {
+    echo "Hyprland"
+}
+
+get_theme() {
+    if [ -f "$HOME/.config/QuishesOS/settings.conf" ]; then
+        grep "theme=" "$HOME/.config/QuishesOS/settings.conf" | cut -d'=' -f2
+    else
+        echo "Liquid Pastel (default)"
+    fi
+}
+
+get_icons() {
+    echo "QuishesOS"
+}
+
+get_font() {
+    echo "Noto Sans 10pt"
+}
+
+get_cursor() {
+    echo "Adwaita"
+}
+
+get_terminal() {
+    echo "$TERM"
+}
+
+get_cpu() {
+    grep "model name" /proc/cpuinfo | head -1 | cut -d':' -f2 | xargs
+}
+
+get_gpu() {
+    lspci | grep -i vga | cut -d':' -f3 | xargs
+}
+
+get_memory() {
+    free -h | awk '/^Mem:/ {print $3 " / " $2}'
+}
+
+# Display format
+print_info() {
+    local key=$1
+    local value=$2
+    printf "${BOLD}${CYAN}%-15s${RESET} %s\n" "$key" "$value"
+}
+
+echo ""
+echo -e "${BOLD}${PURPLE}   ╔═══════════════════════════════╗${RESET}"
+echo -e "${BOLD}${PURPLE}   ║      QuishesOS System Info    ║${RESET}"
+echo -e "${BOLD}${PURPLE}   ╚═══════════════════════════════╝${RESET}"
+echo ""
+
+print_info "OS" "$(get_os)"
+print_info "Kernel" "$(get_kernel)"
+print_info "Uptime" "$(get_uptime)"
+print_info "Packages" "$(get_packages)"
+print_info "Shell" "$(get_shell)"
+print_info "Display" "$(get_resolution)"
+print_info "DE" "$(get_de)"
+print_info "WM" "$(get_wm)"
+print_info "Theme" "$(get_theme)"
+print_info "Icons" "$(get_icons)"
+print_info "Font" "$(get_font)"
+print_info "Cursor" "$(get_cursor)"
+print_info "Terminal" "$(get_terminal)"
+print_info "CPU" "$(get_cpu)"
+print_info "GPU" "$(get_gpu)"
+print_info "Memory" "$(get_memory)"
+
+echo ""

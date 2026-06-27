@@ -1,0 +1,72 @@
+// QuishesOS Control Center Styles
+
+@import "../eww.scss";
+@import "../animations.scss";
+
+.control-center-container {
+    @include glass-panel(0.85);
+    padding: 20px;
+    border-radius: 12px 0 0 12px;
+    @include slide-in(right);
+}
+
+.control-section {
+    @include glass-panel(0.3);
+    padding: 16px;
+    margin-bottom: 12px;
+    @include smooth-transition(all, $anim-quick);
+}
+
+.section-header {
+    margin-bottom: 12px;
+}
+
+.section-title {
+    font-weight: 600;
+    font-size: 11pt;
+}
+
+.toggle-button {
+    @include glass-button;
+    padding: 4px 16px;
+    font-size: 9pt;
+    font-weight: 600;
+    min-width: 50px;
+
+    &.active {
+        background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+        color: white;
+    }
+}
+
+.wifi-list,
+.bluetooth-list {
+    margin-top: 12px;
+}
+
+.wifi-item,
+.bluetooth-item {
+    @include glass-panel(0.2);
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    border-radius: 8px;
+    @include smooth-transition(all, $anim-quick);
+
+    &:hover {
+        background-color: var(--bg-tertiary);
+        transform: translateX(-2px);
+    }
+}
+
+.volume-slider,
+.brightness-slider {
+    margin-top: 8px;
+
+    trough {
+        background: linear-gradient(90deg, var(--bg-tertiary), var(--accent-primary));
+    }
+
+    highlight {
+        background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+    }
+}

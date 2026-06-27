@@ -1,0 +1,95 @@
+/**
+ * QuishesOS rofi Launcher Theme
+ * Spotlight-style glass blur aesthetic
+ */
+
+* {
+    background-color: transparent;
+    text-color: var(--text-primary, #2d2d2d);
+    font: "Noto Sans 11";
+}
+
+window {
+    transparency: "real";
+    location: center;
+    anchor: center;
+    width: 500px;
+    border-radius: 12px;
+    background-color: rgba(255, 245, 240, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+mainbox {
+    padding: 16px;
+    spacing: 12px;
+}
+
+inputbar {
+    spacing: 8px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+prompt {
+    enabled: true;
+    text-color: #ff9ee8;
+    font: "Noto Sans Bold 12";
+}
+
+entry {
+    placeholder: "Search apps...";
+    placeholder-color: rgba(109, 109, 109, 0.6);
+}
+
+listview {
+    columns: 1;
+    lines: 8;
+    spacing: 4px;
+    cycle: true;
+    dynamic: true;
+    scrollbar: false;
+}
+
+element {
+    padding: 10px 12px;
+    border-radius: 6px;
+    spacing: 12px;
+    orientation: horizontal;
+}
+
+element-icon {
+    size: 32px;
+    border-radius: 4px;
+}
+
+element-text {
+    vertical-align: 0.5;
+    text-color: inherit;
+}
+
+element normal.normal {
+    background-color: transparent;
+    text-color: var(--text-primary, #2d2d2d);
+}
+
+element selected.normal {
+    background-color: rgba(255, 158, 232, 0.2);
+    text-color: #ff9ee8;
+    border: 1px solid rgba(255, 158, 232, 0.4);
+}
+
+element alternate.normal {
+    background-color: transparent;
+}
+
+message {
+    padding: 12px;
+    border-radius: 6px;
+    background-color: rgba(255, 230, 220, 0.3);
+}
+
+textbox {
+    text-color: var(--text-secondary, #6b6b6b);
+}

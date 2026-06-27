@@ -1,0 +1,83 @@
+;; QuishesOS Dock
+;; macOS-style floating dock with hover magnification
+
+;; ==========================================
+;; Variables & Polls
+;; ==========================================
+
+(deflisten workspaces
+  "scripts/dock/workspaces.sh")
+
+(deflisten running_apps
+  "scripts/dock/running_apps.sh")
+
+(defvar pinned_apps
+  '[{"name": "File Manager", "icon": "/usr/share/quishesos/icons/thunar.svg", "class": "thunar", "exec": "thunar"},
+    {"name": "Terminal", "icon": "/usr/share/quishesos/icons/kitty.svg", "class": "kitty", "exec": "kitty"},
+    {"name": "Browser", "icon": "/usr/share/quishesos/icons/firefox.svg", "class": "firefox", "exec": "firefox"},
+    {"name": "Code Editor", "icon": "/usr/share/quishesos/icons/neovim.svg", "class": "nvim", "exec": "kitty nvim"},
+    {"name": "Settings", "icon": "/usr/share/quishesos/icons/settings.svg", "class": "settings", "exec": "quishesOS-settings"}]')
+
+;; ==========================================
+;; Widgets
+;; ==========================================
+
+(defwidget dock_app [app]
+  (button :class "dock-app-button ${app.active ? 'active' : ''}"
+          :onclick "scripts/dock/focus_or_launch.sh '${app.class}' '${app.exec}'"
+          :tooltip app.name
+    (box :class "dock-app-container"
+         :orientation "v"
+         :space-evenly false
+      (label :class "dock-app-icon"
+             :text app.icon)
+      (box :class "dock-indicator ${app.running ? 'visible' : 'hidden'}"
+           :width 4
+           :height 4))))
+
+(defwidget dock_apps []
+  (box :class "dock-apps-container"
+       :spacing 8
+       :orientation "h"
+    (for app in pinned_apps
+      (dock_app :app app))))
+
+(defwidget dock_separator []
+  (box :class "dock-separator"
+       :width 2
+       :height 48))
+
+(defwidget dock_workspace_indicator []
+  (box :class "workspace-indicators"
+       :spacing 6
+       :orientation "h"
+    (for ws in "[1, 2, 3, 4, 5]"
+      (button :class "workspace-dot ${ws == current_workspace ? 'active' : ''}"
+              :onclick "hyprctl dispatch workspace ${ws}"
+        (box :class "dot"
+             :width 8
+             :height 8)))))
+
+(defvar current_workspace "1")
+
+;; ==========================================
+;; Window Definition
+;; ==========================================
+
+(defwindow dock
+  :monitor 0
+  :geometry (geometry :x "0%"
+                      :y "-12px"
+                      :width "auto"
+                      :height "64px"
+                      :anchor "bottom center")
+  :stacking "fg"
+  :exclusive false
+  :windowtype "dock"
+  :wm-ignore false
+  
+  (box :class "dock-container ${theme}"
+       :orientation "h"
+       :space-evenly false
+       :spacing 0
+    (dock_apps)))

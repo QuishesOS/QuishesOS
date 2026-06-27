@@ -1,0 +1,106 @@
+// QuishesOS Dock Styles
+// macOS-style floating dock with glass blur
+
+@import "../eww.scss";
+@import "../animations.scss";
+
+.dock-container {
+    @include glass-panel(0.2);
+    padding: 8px 16px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px var(--shadow-color),
+        0 4px 16px rgba(0, 0, 0, 0.15);
+    @include smooth-transition(all);
+}
+
+.dock-apps-container {
+    @include smooth-transition(all);
+}
+
+.dock-app-button {
+    background-color: transparent;
+    border-radius: 12px;
+    padding: 6px;
+    min-width: 48px;
+    min-height: 48px;
+    @include smooth-transition(all, $anim-quick);
+
+    &:hover {
+        background-color: var(--bg-secondary);
+        transform: translateY(-8px) scale(1.2);
+
+        .dock-app-icon {
+            transform: scale(1.1);
+        }
+    }
+
+    &:active {
+        transform: translateY(-6px) scale(1.15);
+    }
+
+    &.active {
+        background-color: var(--bg-tertiary);
+    }
+}
+
+.dock-app-container {
+    @include smooth-transition(all, $anim-quick);
+}
+
+.dock-app-icon {
+    font-size: 32pt;
+    @include smooth-transition(transform, $anim-quick);
+}
+
+.dock-indicator {
+    background-color: var(--accent-primary);
+    border-radius: 50%;
+    margin: 4px auto 0;
+    @include smooth-transition(opacity, $anim-quick);
+
+    &.visible {
+        opacity: 1;
+    }
+
+    &.hidden {
+        opacity: 0;
+    }
+}
+
+.dock-separator {
+    background: linear-gradient(180deg,
+            transparent,
+            var(--text-secondary),
+            transparent);
+    opacity: 0.3;
+    margin: 0 8px;
+}
+
+.workspace-indicators {
+    padding: 4px 8px;
+}
+
+.workspace-dot {
+    background-color: transparent;
+    border-radius: 50%;
+    padding: 2px;
+    @include smooth-transition(all, $anim-quick);
+
+    .dot {
+        background-color: var(--text-secondary);
+        border-radius: 50%;
+        opacity: 0.4;
+        @include smooth-transition(all, $anim-quick);
+    }
+
+    &.active .dot {
+        background-color: var(--accent-primary);
+        opacity: 1;
+        transform: scale(1.3);
+    }
+
+    &:hover .dot {
+        opacity: 0.8;
+        transform: scale(1.2);
+    }
+}

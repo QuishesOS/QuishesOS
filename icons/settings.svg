@@ -1,0 +1,39 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="settingsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8fbc8f"/>
+      <stop offset="100%" stop-color="#b8c9b8"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  
+  <!-- Background rounded square -->
+  <rect width="512" height="512" rx="112" fill="url(#settingsGrad)" filter="url(#shadow)"/>
+  
+  <!-- Gear icon -->
+  <g transform="translate(256, 256)">
+    <!-- Outer gear teeth -->
+    <path d="M 0,-120 L 20,-140 L 20,-100 L 40,-100 L 60,-120 L 80,-100 L 80,-60 L 100,-40 L 100,-20 L 120,-20 L 140,-40 L 120,0 L 140,40 L 120,20 L 100,20 L 100,40 L 80,60 L 80,100 L 60,120 L 40,100 L 20,100 L 20,140 L 0,120 L -20,140 L -20,100 L -40,100 L -60,120 L -80,100 L -80,60 L -100,40 L -100,20 L -120,20 L -140,40 L -120,0 L -140,-40 L -120,-20 L -100,-20 L -100,-40 L -80,-60 L -80,-100 L -60,-120 L -40,-100 L -20,-100 L -20,-140 Z" 
+          fill="rgba(255,255,255,0.9)" 
+          stroke="rgba(255,255,255,0.3)" 
+          stroke-width="3">
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="8s" repeatCount="indefinite"/>
+    </path>
+    
+    <!-- Inner gear circle -->
+    <circle cx="0" cy="0" r="70" 
+            fill="rgba(255,255,255,0.95)" 
+            stroke="rgba(143,188,143,0.3)" 
+            stroke-width="4"/>
+    
+    <!-- Center circle -->
+    <circle cx="0" cy="0" r="35" 
+            fill="rgba(143,188,143,0.3)"/>
+    
+    <!-- Center detail -->
+    <circle cx="0" cy="0" r="15" 
+            fill="rgba(255,255,255,0.8)"/>
+  </g>
+</svg>

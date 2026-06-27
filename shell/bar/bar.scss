@@ -1,0 +1,61 @@
+// QuishesOS Top Bar Styles
+
+@import "../eww.scss";
+@import "../animations.scss";
+
+.bar-container {
+    @include glass-panel(0.15);
+    padding: 0 16px;
+    border-radius: 0;
+    box-shadow: 0 2px 12px var(--shadow-color);
+}
+
+.bar-left,
+.bar-right {
+    @include smooth-transition(all);
+}
+
+.app-name {
+    font-weight: 600;
+    font-size: 11pt;
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.icon-button {
+    min-width: 28px;
+    min-height: 28px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    @include smooth-transition(background-color, $anim-quick);
+
+    &:hover {
+        background-color: var(--bg-secondary);
+
+        .icon {
+            color: var(--accent-primary);
+        }
+    }
+}
+
+.battery-box {
+    padding: 4px 8px;
+    border-radius: 6px;
+    @include smooth-transition(background-color, $anim-quick);
+
+    &:hover {
+        background-color: var(--bg-secondary);
+    }
+}
+
+.clock-button {
+    padding: 4px 12px;
+    border-radius: 6px;
+    @include smooth-transition(background-color, $anim-quick);
+
+    &:hover {
+        background-color: var(--bg-secondary);
+    }
+}

@@ -1,0 +1,32 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="folderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff9ee8"/>
+      <stop offset="100%" stop-color="#b4a7ff"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  
+  <!-- Background rounded square -->
+  <rect width="512" height="512" rx="112" fill="url(#folderGrad)" filter="url(#shadow)"/>
+  
+  <!-- Folder icon -->
+  <g transform="translate(96, 140)">
+    <!-- Folder back -->
+    <path d="M 40 40 L 40 200 Q 40 220 60 220 L 280 220 Q 300 220 300 200 L 300 80 Q 300 60 280 60 L 140 60 L 120 40 L 60 40 Q 40 40 40 40 Z" 
+          fill="rgba(255,255,255,0.9)" 
+          stroke="rgba(255,255,255,0.3)" 
+          stroke-width="2"/>
+    
+    <!-- Folder tab -->
+    <path d="M 40 40 L 60 40 Q 40 40 40 60 L 40 90 L 300 90 L 300 80 Q 300 60 280 60 L 140 60 L 120 40 Z" 
+          fill="rgba(255,255,255,0.95)"/>
+    
+    <!-- Folder details -->
+    <circle cx="100" cy="140" r="12" fill="rgba(255,158,232,0.4)"/>
+    <rect x="130" y="132" width="120" height="8" rx="4" fill="rgba(180,167,255,0.3)"/>
+    <rect x="130" y="152" width="90" height="8" rx="4" fill="rgba(180,167,255,0.2)"/>
+  </g>
+</svg>

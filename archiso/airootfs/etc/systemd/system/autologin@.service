@@ -1,0 +1,25 @@
+[Unit]
+Description=Getty on %I with automatic login
+Documentation=man:agetty(8) man:systemd-getty-generator(8)
+After=systemd-user-sessions.service plymouth-quit-wait.service
+After=rc-local.service
+
+# Conflict with getty on the same TTY
+Conflicts=getty@%i.service
+
+[Service]
+ExecStart=-/sbin/agetty -o '-p -f quishes' --noclear --autologin quishes %I $TERM
+Type=idle
+Restart=always
+RestartSec=0
+UtmpIdentifier=%I
+TTYPath=/dev/%I
+TTYReset=yes
+TTYVHangup=yes
+TTYVTDisarm=yes
+KillMode=process
+IgnoreSIGPIPE=no
+SendSIGHUP=yes
+
+[Install]
+WantedBy=getty.target
