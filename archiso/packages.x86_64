@@ -39,8 +39,7 @@ xdg-desktop-portal-gtk
 qt5-wayland
 qt6-wayland
 
-# Desktop Shell (eww + rofi)
-eww
+# Desktop Shell (rofi)
 rofi-wayland
 gtk-layer-shell
 jq
@@ -69,7 +68,6 @@ ttf-dejavu
 ttf-liberation
 ttf-font-awesome
 ttf-nerd-fonts-symbols
-ttf-inter
 ttf-jetbrains-mono
 
 # Icons & Themes
@@ -106,7 +104,6 @@ wofi
 # System Tools
 htop
 btop
-neofetch
 fastfetch
 git
 wget
